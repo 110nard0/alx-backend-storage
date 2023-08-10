@@ -7,7 +7,9 @@ DELIMITER $$
           DECLARE project_id INT;
 
           -- Check if project exists, else create it
-           SELECT id INTO project_id FROM projects WHERE name = project_name;
+           SELECT id INTO project_id
+             FROM projects
+            WHERE name = project_name;
 
                IF project_id IS NULL THEN
                   INSERT INTO projects (name) VALUES (project_name);
