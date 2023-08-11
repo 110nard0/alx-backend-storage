@@ -6,8 +6,11 @@ DELIMITER ||
  CREATE PROCEDURE
         ComputeAverageWeightedScoreForUsers()
   BEGIN
+        -- Declare variables
         DECLARE done INT DEFAULT FALSE;
         DECLARE user_id INT;
+
+        -- eclare and open cursor
         DECLARE cur CURSOR
             FOR SELECT id FROM users;
         DECLARE CONTINUE HANDLER
@@ -16,7 +19,7 @@ DELIMITER ||
 
            OPEN cur;
 
-           -- start loop and fetch id for each user
+           -- start loop and fetch id for each user from cursor
      read_loop: LOOP
                 FETCH cur INTO user_id;
                    IF done THEN
