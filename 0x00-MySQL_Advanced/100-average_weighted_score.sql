@@ -19,6 +19,7 @@ DELIMITER $$
 
                    SET user_avg = total_score / total_weight;
 
+                -- Update user's average score
                 UPDATE users
                    SET average_score = user_avg
                  WHERE id = user_id;
