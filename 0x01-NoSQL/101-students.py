@@ -13,7 +13,8 @@ def top_students(mongo_collection):
     """
     pipeline = [
         {"$unwind": "$topics"},
-        {"$group": {"_id": "$_id", "name": {"$first": "$name"}, "averageScore": {"$avg": "$topics.score"}}},
+        {"$group": {"_id": "$_id", "name": {"$first": "$name"},
+                    "averageScore": {"$avg": "$topics.score"}}},
         {"$sort": {"averageScore": -1}}
     ]
     top_students = mongo_collection.aggregate(pipeline)
