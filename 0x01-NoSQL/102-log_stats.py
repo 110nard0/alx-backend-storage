@@ -29,10 +29,9 @@ if __name__ == "__main__":
         {'$sort': {'log_count': -1}},
         {'$limit': 10}
     ]
-    top_addresses = xlogs.aggregate(pipeline)
+    top_addresses = list(xlogs.aggregate(pipeline))
 
     # Print top 10 frequently-occuring IP addresses in logs
-    print("IPs:\n")
+    print("IPs:")
     for address in top_addresses:
         print("\t{}: {}".format(address['_id'], address['log_count']))
-
