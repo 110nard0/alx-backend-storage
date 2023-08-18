@@ -2,17 +2,18 @@
 """Module exercise"""
 
 import redis
-import uuid
+from typing import Union
+from uuid import uuid4
 
 
 class Cache():
-    """Cache class for storing user variables"""
+    """Cache class for storing user data"""
     def __init__(self):
         """Initializes a Cache class instance"""
         self._redis = redis.Redis()
         self._redis.flushdb()
 
-    def store(self, data: any) -> str:
+    def store(self, data: Union[str, int, float, bytes]) -> str:
         """Generates a random key and stores input in Redis cache
 
         Argument:
@@ -21,6 +22,6 @@ class Cache():
         Returns:
             key (str): key hash mapped to stored Redis value
         """
-        key = str(uuid.uuid4())
-        self._redis.set(key, data)
-        return key
+        rand_key = str(uuid4())
+        self._redis.set(rand_key, data)
+        return rand_key
