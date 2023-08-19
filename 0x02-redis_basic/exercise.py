@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Module exercise"""
+"""Module exercise contains a Redis cache class and [decorator] functions"""
 
 import redis
 from functools import wraps
@@ -55,6 +55,26 @@ def call_history(method: Callable) -> Callable:
         return value
 
     return wrapper_func
+
+
+def replay(store: Callable):
+    """
+    """
+    cache = store.__self__
+    name = store.__qualname__
+
+    input_key = f"{name}:inputs"
+    output_key = f"{name}:outputs"
+
+    inputs = cache._redis.lrange(f"{input_key}", 0, -1)
+    outputs = cache._redis.lrange(f"{output_key}", 0, -1)
+
+    print(f"{name} was called {len(inputs)} times:")
+
+    for input, output in zip(inputs, outputs):
+        input_str = input.decode("utf-8")
+        output_str = output.decode("utf-8")
+        print(f"{name}(*{input_str}) -> {output_str}")
 
 
 class Cache:
