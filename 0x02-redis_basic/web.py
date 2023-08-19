@@ -3,6 +3,7 @@
 
 import redis
 import requests
+from datetime import timedelta
 from functools import wraps
 
 r = redis.Redis()
@@ -15,6 +16,7 @@ def count_url(method):
     @wraps(method)
     def wrapper(url):
         r.incr(f"count:{url}")
+        r.incr(method.__qualname__)
         return method(url)
     return wrapper
 
@@ -30,7 +32,7 @@ def cache_page(method):
             return cached_page.decode('utf-8')
         else:
             page = method(url)
-            r.setex(url, 10, page)
+            r.setex(url, timedelta(seconds=10), value=page)
             return page
     return wrapper
 
@@ -42,3 +44,6 @@ def get_page(url: str) -> str:
     """
     page = requests.get(url).text
     return page
+
+
+print(get_page('http://slowwly.robertomurray.co.uk'))
