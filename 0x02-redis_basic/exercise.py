@@ -2,8 +2,33 @@
 """Module exercise"""
 
 import redis
+from functools import wraps
 from typing import Callable, Optional, Union
 from uuid import uuid4
+
+
+def count_calls(method: Callable) -> Callable:
+    """Decorator function
+
+    Argument:
+        method (Callable): Cache class instance method
+
+    Returns:
+        increment_func (Callable): wrapper function
+    """
+    key = method.__qualname__
+
+    @wraps(method)
+    def increment_func(self, *args, **kwargs):
+        """Increments the count for method key on every method call
+
+        Returns:
+            (any): value returned by original method
+        """
+        self._redis.incr(key)
+        return method(self, *args, **kwargs)
+
+    return increment_func
 
 
 class Cache:
@@ -13,6 +38,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """Generates a random key and stores input in Redis cache
 
