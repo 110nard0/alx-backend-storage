@@ -58,7 +58,10 @@ def call_history(method: Callable) -> Callable:
 
 
 def replay(store: Callable):
-    """
+    """Displays the history of calls of a particular function
+
+    Argument:
+        store (Callable): Cache class instance method
     """
     cache = store.__self__
     name = store.__qualname__
