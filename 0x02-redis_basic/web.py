@@ -15,8 +15,9 @@ def count_url(method):
     """
     @wraps(method)
     def wrapper(url):
-        r.incr(f"count:{url}")
+        """wrapper function"""
         r.incr(method.__qualname__)
+        r.incr(f"count:{url}")
         return method(url)
     return wrapper
 
@@ -27,6 +28,7 @@ def cache_page(method):
     """
     @wraps(method)
     def wrapper(url):
+        """wrapper function"""
         cached_page = r.get(url)
         if cached_page:
             return cached_page.decode('utf-8')
@@ -44,6 +46,3 @@ def get_page(url: str) -> str:
     """
     page = requests.get(url).text
     return page
-
-
-print(get_page('http://slowwly.robertomurray.co.uk'))
